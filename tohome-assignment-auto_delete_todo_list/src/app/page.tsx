@@ -36,8 +36,10 @@ export default function Home() {
       setMainList((prev) => [...prev, item]);
       //remove time out of selected
       setSelected((prev) => {
-        const { [item.name]: _, ...rest } = prev;
-        return rest;
+        const rest = Object.fromEntries(
+          Object.entries(prev).filter(([key]) => key !== item.name)
+        );
+        return rest;        
       });
     }, 5000);
 
@@ -57,15 +59,17 @@ export default function Home() {
     setMainList((prev) => [...prev, item]);
     //romove from selected
     setSelected((prev) => {
-      const { [item.name]: _, ...rest } = prev;
-      return rest;
+      const rest = Object.fromEntries(
+        Object.entries(prev).filter(([key]) => key !== item.name)
+      );
+      return rest;      
     });
   };
 
   //move with handle
-  const handleDrop = (item: Item, type: 'Fruit' | 'Vegetable') => {
+  const handleDrop = (item: Item) => {
     moveToType(item);
-  };
+  }  
 
   return (
     <div className="min-h-screen bg-gray-100 text-black">
@@ -82,7 +86,7 @@ export default function Home() {
             onDrop={(e) => {
               const item = JSON.parse(e.dataTransfer.getData('item'));
               //only handle drop in fruit and veget columns
-              if (column !== 'Main') handleDrop(item, column as 'Fruit' | 'Vegetable');
+              if (column !== 'Main') handleDrop(item);
             }}
           >
             {/* column title */}
